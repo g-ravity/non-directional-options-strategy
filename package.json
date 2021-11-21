@@ -1,0 +1,54 @@
+{
+	"name": "non-directional-options-strategy",
+	"description": "Nifty/BNF Non Directional Strategy Backtest & Forward Test",
+	"version": "1.0.0",
+	"engines": {
+		"node": ">= 12.13"
+	},
+	"scripts": {
+		"clean": "rm -rf node_modules && rm yarn.lock && rm -rf build",
+		"build": "tsc -p tsconfig.release.json",
+		"watch:ts": "tsc -w -p tsconfig.release.json",
+		"watch:node": "nodemon -r dotenv-safe/config --delay 100ms build/src/index.js",
+		"start": "node -r dotenv-safe/config build/src/index.js",
+		"start:qa": "concurrently -r \"npm run watch:ts\" \"npm run watch:node\"",
+		"lint": "eslint . --ext .ts,.js"
+	},
+	"main": "index.ts",
+	"author": "Ravik Ganguly <theravikganguly@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"husky": {
+		"hooks": {
+				"pre-commit": "lint-staged && yarn build"
+		}
+	},
+	"lint-staged": {
+		"src/**/*.{ts,js}": [
+				"eslint --fix"
+		]
+	},
+	"dependencies": {
+		"papaparse": "^5.3.1"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.12.11",
+		"@types/express": "^4.17.6",
+		"@types/node": "~12.12.27",
+		"@types/papaparse": "^5.3.1",
+		"@typescript-eslint/eslint-plugin": "~2.19.2",
+		"@typescript-eslint/parser": "~2.19.2",
+		"concurrently": "5.3.0",
+		"dotenv-safe": "^8.2.0",
+		"eslint": "~6.8.0",
+		"eslint-config-prettier": "~6.10.0",
+		"eslint-plugin-json": "^3.1.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"husky": "^4.3.0",
+		"lint-staged": "^10.5.1",
+		"nodemon": "^2.0.2",
+		"prettier": "~1.19.1",
+		"tsutils": "~3.17.0",
+		"typescript": "~3.7.5"
+	}
+}
