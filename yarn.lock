@@ -1132,6 +1132,11 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
+black-scholes@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/black-scholes/-/black-scholes-1.1.0.tgz#2db77cfaf48ff9dae0d5d03693aeb02ef22f9b09"
+  integrity sha1-Lbd8+vSP+drg1dA2k66wLvIvmwk=
+
 boxen@^5.0.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-5.1.2.tgz#788cb686fc83c1f486dfa8a40c68fc2b831d2b50"
@@ -1907,6 +1912,13 @@ graceful-fs@^4.1.2:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
+
+greeks@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/greeks/-/greeks-1.0.0.tgz#7fce8de8f1b014ec8ab2a5cc01aa9d14b69bfe29"
+  integrity sha1-f86N6PGwFOyKsqXMAaqdFLab/ik=
+  dependencies:
+    black-scholes "1.1.0"
 
 has-flag@^3.0.0:
   version "3.0.0"

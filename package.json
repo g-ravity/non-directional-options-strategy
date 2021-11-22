@@ -20,15 +20,16 @@
 	"private": false,
 	"husky": {
 		"hooks": {
-				"pre-commit": "lint-staged && yarn build"
+			"pre-commit": "lint-staged && yarn build"
 		}
 	},
 	"lint-staged": {
 		"src/**/*.{ts,js}": [
-				"eslint --fix"
+			"eslint --fix"
 		]
 	},
 	"dependencies": {
+		"greeks": "^1.0.0",
 		"papaparse": "^5.3.1"
 	},
 	"devDependencies": {
