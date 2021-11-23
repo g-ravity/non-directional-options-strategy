@@ -4,3 +4,5 @@ export const STRADDLE_START_TIME = '09:20:00';
 export const STRADDLE_SQ_OFF_TIME = '15:00:00';
 
 export const TICKERS_LIST = ['BANKNIFTY', 'NIFTY'];
+
+export const INTEREST_RATE = 10;

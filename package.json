@@ -29,12 +29,15 @@
 		]
 	},
 	"dependencies": {
+		"date-fns": "^2.26.0",
 		"greeks": "^1.0.0",
+		"lodash": "^4.17.21",
 		"papaparse": "^5.3.1"
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.12.11",
 		"@types/express": "^4.17.6",
+		"@types/lodash": "^4.14.177",
 		"@types/node": "~12.12.27",
 		"@types/papaparse": "^5.3.1",
 		"@typescript-eslint/eslint-plugin": "~2.19.2",
