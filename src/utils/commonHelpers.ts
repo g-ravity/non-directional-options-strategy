@@ -4,3 +4,5 @@ export const getFormattedDate = (dateString: string): string => {
 
 	return updatedDate;
 };
+
+export const addZeroPadding = (num: number): string => (num < 10 ? `0${num}` : num.toString());

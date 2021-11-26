@@ -6,3 +6,5 @@ export const STRADDLE_SQ_OFF_TIME = '15:00:00';
 export const TICKERS_LIST = ['BANKNIFTY', 'NIFTY'];
 
 export const INTEREST_RATE = 10;
+export const DELTA_DIFFERENCE_THRESHOLD = 20;
+export const UPDATE_INTERVAL = 5;
