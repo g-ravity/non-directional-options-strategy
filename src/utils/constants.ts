@@ -4,6 +4,14 @@ export const STRADDLE_START_TIME = '09:20:00';
 export const STRADDLE_SQ_OFF_TIME = '15:00:00';
 
 export const TICKERS_LIST = ['BANKNIFTY', 'NIFTY'];
+export const TICKER_INFO_MAP = {
+	BANKNIFTY: {
+		lotSize: 25,
+	},
+	NIFTY: {
+		lotSize: 50,
+	},
+};
 
 export const INTEREST_RATE = 10;
 export const DELTA_DIFFERENCE_THRESHOLD = 20;
