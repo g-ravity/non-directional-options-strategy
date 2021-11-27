@@ -16,7 +16,9 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 	let tradeDate = '';
 	let straddleEntryValue: number;
 
-	optionsData.map((item) => {
+	for (let i = 0; i < optionsData.length; i++) {
+		const item = optionsData[i];
+
 		const dateTime = item['Date/Time'] ? item['Date/Time'].split(' ') : undefined;
 		if (dateTime && dateTime?.[0] !== tradeDate) tradeDate = dateTime?.[0];
 
@@ -29,12 +31,11 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 			let isBeforeEndTime = true;
 
 			while (isBeforeEndTime && isAfterStartTime) {
-				console.log(currentDateTime.getMinutes());
-				const dateTimeString = `${currentDateTime.getDate()}-${currentDateTime.getMonth() + 1}-${currentDateTime.getFullYear()} ${addZeroPadding(currentDateTime.getHours())}:${addZeroPadding(
-					currentDateTime.getMinutes(),
-				)}:${addZeroPadding(currentDateTime.getSeconds())}`;
+				const dateString = `${currentDateTime.getDate()}-${currentDateTime.getMonth() + 1}-${currentDateTime.getFullYear()}`;
+				const timeString = `${addZeroPadding(currentDateTime.getHours())}:${addZeroPadding(currentDateTime.getMinutes())}:${addZeroPadding(currentDateTime.getSeconds())}`;
+				const dateTimeString = `${dateString} ${timeString}`;
 
-				isBeforeEndTime = new Date(dateTimeString) <= new Date(`${updatedDate} ${STRADDLE_SQ_OFF_TIME}`);
+				isBeforeEndTime = new Date(`${getFormattedDate(dateString)} ${timeString}`) < new Date(`${updatedDate} ${STRADDLE_SQ_OFF_TIME}`);
 
 				const strike = Math.round(+item.Open / 100) * 100;
 				const CEStrike = `${item.Ticker}WK${strike}CE`;
@@ -44,7 +45,7 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 				const { Open: PEPrice } = find(optionsData, { Ticker: PEStrike, 'Date/Time': dateTimeString });
 				const { Open: volatility } = find(optionsData, { Ticker: 'INDIAVIX', 'Date/Time': dateTimeString });
 
-				const { 'Date/Time': expiryDateTime } = optionsData[findLastIndex(optionsData, (data) => data.Ticker === 'BANKNIFTY')];
+				const { 'Date/Time': expiryDateTime } = optionsData[findLastIndex(optionsData, (data) => data.Ticker === item.Ticker)];
 				const daysToExpiry = differenceInDays(new Date(getFormattedDate(expiryDateTime.split(' ')[0])), new Date(updatedDate));
 
 				const CEDelta = Math.abs(greeks.getDelta(+item.Open, +strike, daysToExpiry / 365, +volatility / 100, INTEREST_RATE / 100, 'call').toFixed(3) * 100);
@@ -53,7 +54,8 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 				if (isNaN(straddleEntryValue)) {
 					if (Math.abs(CEDelta - PEDelta) < 20) {
 						straddleEntryValue = CEPrice + PEPrice;
-						console.log(`Sold ${CEStrike} at ₹${CEPrice}.\nSold ${PEStrike} at ₹${PEPrice}.\nCombined Premium = ₹${straddleEntryValue}`);
+						console.log(`Trade Date: ${dateString} @ ${timeString}\n`);
+						console.log(`Sold ${CEStrike} at ₹${CEPrice}.\nSold ${PEStrike} at ₹${PEPrice}.\nCombined Premium = ₹${straddleEntryValue.toFixed(2)}`);
 						console.log(`PNL: ${straddleEntryValue - (CEPrice + PEPrice)}`);
 					} else {
 						console.log('Could not initiate the straddle as Delta Diff is greater than threshold');
@@ -62,7 +64,7 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 					if (Math.abs(CEDelta - PEDelta) >= 20) {
 						console.log('Need to do adjustments here!');
 					} else {
-						console.log(`\nCurrent CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nTotal Premium: ${CEPrice + PEPrice}`);
+						console.log(`\nCurrent CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nCombined Premium = ${(CEPrice + PEPrice).toFixed(2)}`);
 						console.log(
 							`PNL @ ${addZeroPadding(currentDateTime.getHours())}:${addZeroPadding(currentDateTime.getMinutes())} -> ${(
 								(straddleEntryValue - (CEPrice + PEPrice)) *
@@ -71,11 +73,16 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 						);
 					}
 				}
-				console.log(currentDateTime.getMinutes() + UPDATE_INTERVAL);
+
 				currentDateTime.setMinutes(currentDateTime.getMinutes() + UPDATE_INTERVAL);
+				const nextDateString = `${currentDateTime.getDate()}-${currentDateTime.getMonth() + 1}-${currentDateTime.getFullYear()}`;
+				const index = findLastIndex(optionsData, (data) => data.Ticker === item.Ticker && data['Date/Time'].includes(nextDateString));
+				i = index;
 			}
+
+			straddleEntryValue = undefined;
 		}
-	});
+	}
 };
 
 fs.readFile(`${homedir}/${FILE_PATH}`, 'utf8', (err, data) => {
