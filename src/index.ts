@@ -10,6 +10,7 @@ import differenceInDays from 'date-fns/differenceInDays';
 import { FILE_PATH, INTEREST_RATE, STRADDLE_SQ_OFF_TIME, STRADDLE_START_TIME, TICKERS_LIST, TICKER_INFO_MAP, UPDATE_INTERVAL } from './utils/constants';
 import { IOptionData } from './types';
 import { addZeroPadding, getFormattedDate } from './utils/commonHelpers';
+import { logger } from './utils/logger';
 
 const onParseComplete = (results: ParseResult<IOptionData>) => {
 	const optionsData = results.data;
@@ -54,18 +55,18 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 				if (isNaN(straddleEntryValue)) {
 					if (Math.abs(CEDelta - PEDelta) < 20) {
 						straddleEntryValue = CEPrice + PEPrice;
-						console.log(`Trade Date: ${dateString} @ ${timeString}\n`);
-						console.log(`Sold ${CEStrike} at ₹${CEPrice}.\nSold ${PEStrike} at ₹${PEPrice}.\nCombined Premium = ₹${straddleEntryValue.toFixed(2)}`);
-						console.log(`PNL: ${straddleEntryValue - (CEPrice + PEPrice)}`);
+						logger.log(`Trade Date: ${dateString} @ ${timeString}\n`);
+						logger.log(`Sold ${CEStrike} at ₹${CEPrice}.\nSold ${PEStrike} at ₹${PEPrice}.\nCombined Premium = ₹${straddleEntryValue.toFixed(2)}`);
+						logger.log(`PNL: ${straddleEntryValue - (CEPrice + PEPrice)}`);
 					} else {
-						console.log('Could not initiate the straddle as Delta Diff is greater than threshold');
+						logger.log('Could not initiate the straddle as Delta Diff is greater than threshold');
 					}
 				} else {
 					if (Math.abs(CEDelta - PEDelta) >= 20) {
-						console.log('Need to do adjustments here!');
+						logger.log('Need to do adjustments here!');
 					} else {
-						console.log(`\nCurrent CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nCombined Premium = ${(CEPrice + PEPrice).toFixed(2)}`);
-						console.log(
+						logger.log(`\nCurrent CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nCombined Premium = ${(CEPrice + PEPrice).toFixed(2)}`);
+						logger.log(
 							`PNL @ ${addZeroPadding(currentDateTime.getHours())}:${addZeroPadding(currentDateTime.getMinutes())} -> ${(
 								(straddleEntryValue - (CEPrice + PEPrice)) *
 								TICKER_INFO_MAP[item.Ticker].lotSize
@@ -83,11 +84,13 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 			straddleEntryValue = undefined;
 		}
 	}
+
+	console.log('DONE! 🎉🎉 🎊🎊');
 };
 
 fs.readFile(`${homedir}/${FILE_PATH}`, 'utf8', (err, data) => {
 	if (err) {
-		console.error(err);
+		logger.error(err);
 		return;
 	}
 
@@ -95,7 +98,7 @@ fs.readFile(`${homedir}/${FILE_PATH}`, 'utf8', (err, data) => {
 		header: true,
 		dynamicTyping: true,
 		complete: onParseComplete,
-		error: (err: Error) => console.log('Something went wrong while parsing! \n', err),
+		error: (err: Error) => logger.log('Something went wrong while parsing! \n', err),
 		fastMode: true,
 	});
 });

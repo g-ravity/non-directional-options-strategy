@@ -8,7 +8,7 @@
 	"scripts": {
 		"clean": "rm -rf node_modules && rm yarn.lock && rm -rf build",
 		"build": "tsc -p tsconfig.release.json",
-		"watch:ts": "tsc -w -p tsconfig.release.json",
+		"watch:ts": "rm logs.txt && rm error-logs.txt && tsc -w -p tsconfig.release.json",
 		"watch:node": "nodemon -r dotenv-safe/config --delay 100ms build/src/index.js",
 		"start": "node -r dotenv-safe/config build/src/index.js",
 		"start:qa": "concurrently -r \"npm run watch:ts\" \"npm run watch:node\"",
