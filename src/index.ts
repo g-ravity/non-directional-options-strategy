@@ -55,22 +55,22 @@ const onParseComplete = (results: ParseResult<IOptionData>) => {
 				if (isNaN(straddleEntryValue)) {
 					if (Math.abs(CEDelta - PEDelta) < 20) {
 						straddleEntryValue = CEPrice + PEPrice;
-						logger.log(`Trade Date: ${dateString} @ ${timeString}\n`);
+						logger.log(`${item.Ticker} Straddle -> Trade Date: ${dateString} @ ${timeString}\n`);
 						logger.log(`Sold ${CEStrike} at ₹${CEPrice}.\nSold ${PEStrike} at ₹${PEPrice}.\nCombined Premium = ₹${straddleEntryValue.toFixed(2)}`);
-						logger.log(`PNL: ${straddleEntryValue - (CEPrice + PEPrice)}`);
+						logger.log(`PNL: ${straddleEntryValue - (CEPrice + PEPrice)}\n`);
 					} else {
-						logger.log('Could not initiate the straddle as Delta Diff is greater than threshold');
+						logger.log('Could not initiate the straddle as Delta Diff is greater than threshold\n');
 					}
 				} else {
 					if (Math.abs(CEDelta - PEDelta) >= 20) {
 						logger.log('Need to do adjustments here!');
 					} else {
-						logger.log(`\nCurrent CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nCombined Premium = ${(CEPrice + PEPrice).toFixed(2)}`);
+						logger.log(`Current CE Price: ${CEPrice}\nCurrent PE Price: ${PEPrice}\nCombined Premium = ${(CEPrice + PEPrice).toFixed(2)}`);
 						logger.log(
 							`PNL @ ${addZeroPadding(currentDateTime.getHours())}:${addZeroPadding(currentDateTime.getMinutes())} -> ${(
 								(straddleEntryValue - (CEPrice + PEPrice)) *
 								TICKER_INFO_MAP[item.Ticker].lotSize
-							).toFixed(2)}`,
+							).toFixed(2)}\n`,
 						);
 					}
 				}
