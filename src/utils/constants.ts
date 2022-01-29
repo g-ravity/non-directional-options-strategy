@@ -7,9 +7,11 @@ export const TICKERS_LIST = ['BANKNIFTY', 'NIFTY'];
 export const TICKER_INFO_MAP = {
 	BANKNIFTY: {
 		lotSize: 25,
+		noOfLots: 1,
 	},
 	NIFTY: {
 		lotSize: 50,
+		noOfLots: 1,
 	},
 };
 

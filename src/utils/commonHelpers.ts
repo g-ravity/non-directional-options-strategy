@@ -6,3 +6,5 @@ export const getFormattedDate = (dateString: string): string => {
 };
 
 export const addZeroPadding = (num: number): string => (num < 10 ? `0${num}` : num.toString());
+
+export const isNotEmptyObject = (obj: any) => obj && Object.keys(obj).length > 0;

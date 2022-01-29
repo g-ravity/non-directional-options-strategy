@@ -8,3 +8,7 @@ export interface IOptionData {
 	Volume: number;
 	'Open Interest': number;
 }
+
+export interface IActivePosition {
+	[key: string]: 'buy' | 'sell';
+}
